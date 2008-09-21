@@ -3,15 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFExtensions", "WPFExtensions\WPFExtensions.csproj", "{A7915102-8326-4862-96F0-4EB80ED087B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples.csproj", "{52F707B2-4C09-4E54-B09B-3A2FA00A48E2}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
+		SccNumberOfProjects = 3
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs08.codeplex.com/
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = WPFExtensions\\WPFExtensions.csproj
 		SccProjectName1 = WPFExtensions
 		SccLocalPath1 = WPFExtensions
+		SccProjectUniqueName2 = Samples\\Samples.csproj
+		SccProjectName2 = Samples
+		SccLocalPath2 = Samples
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +27,10 @@ Global
 		{A7915102-8326-4862-96F0-4EB80ED087B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7915102-8326-4862-96F0-4EB80ED087B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7915102-8326-4862-96F0-4EB80ED087B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52F707B2-4C09-4E54-B09B-3A2FA00A48E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52F707B2-4C09-4E54-B09B-3A2FA00A48E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52F707B2-4C09-4E54-B09B-3A2FA00A48E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52F707B2-4C09-4E54-B09B-3A2FA00A48E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
