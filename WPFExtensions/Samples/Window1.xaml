@@ -19,13 +19,15 @@
         </Style>
     </Window.Resources>
     <Canvas>
-        <Label Content="Hello, I'm Draggable" 
+        <Label Name="lblDraggable"
+               Content="Hello, I'm Draggable" 
                extbehaviour:DragBehaviour.IsDragEnabled="True" 
-               extbehaviour:DragBehaviour.X="{Binding RelativeSource={RelativeSource self},Path=(Canvas.Left),Mode=TwoWay}"
-               extbehaviour:DragBehaviour.Y="{Binding RelativeSource={RelativeSource self},Path=(Canvas.Top),Mode=TwoWay}"
+               extbehaviour:DragBehaviour.X="{Binding RelativeSource={RelativeSource self},Path=(Canvas.Left)}"
+               extbehaviour:DragBehaviour.Y="{Binding RelativeSource={RelativeSource self},Path=(Canvas.Top)}"
                Canvas.Left="0"
-               Canvas.Top="50">
+               Canvas.Top="{Binding ElementName=posSlider,Path=Value,Mode=TwoWay}">
         </Label>
-        <Label Content="Sorry, I'm not"/>
+        <Slider Name="posSlider" Minimum="0" Maximum="300" Value="50" Width="250"/>
+        <Label Content="Sorry, I'm not" Canvas.Bottom="0"/>
     </Canvas>
 </Window>

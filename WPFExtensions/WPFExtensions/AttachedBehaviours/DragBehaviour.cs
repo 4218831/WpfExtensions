@@ -12,8 +12,8 @@ namespace WPFExtensions.AttachedBehaviours
 		#region Attached DPs
 		public static readonly DependencyProperty IsDragEnabledProperty = DependencyProperty.RegisterAttached( "IsDragEnabled", typeof( bool ), typeof( DragBehaviour ), new UIPropertyMetadata( false, OnIsDragEnabledPropertyChanged ) );
 		public static readonly DependencyProperty IsDraggingProperty = DependencyProperty.RegisterAttached( "IsDragging", typeof( bool ), typeof( DragBehaviour ), new UIPropertyMetadata( false ) );
-		public static readonly DependencyProperty XProperty = DependencyProperty.RegisterAttached( "X", typeof( double ), typeof( DragBehaviour ), new UIPropertyMetadata( 0.0 ) );
-		public static readonly DependencyProperty YProperty = DependencyProperty.RegisterAttached( "Y", typeof( double ), typeof( DragBehaviour ), new UIPropertyMetadata( 0.0 ) );
+		public static readonly DependencyProperty XProperty = DependencyProperty.RegisterAttached( "X", typeof( double ), typeof( DragBehaviour ), new FrameworkPropertyMetadata( 0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
+		public static readonly DependencyProperty YProperty = DependencyProperty.RegisterAttached( "Y", typeof( double ), typeof( DragBehaviour ), new FrameworkPropertyMetadata( 0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault ) );
 		private static readonly DependencyPropertyKey OriginalXPropertyKey = DependencyProperty.RegisterAttachedReadOnly( "OriginalX", typeof( double ), typeof( DragBehaviour ), new UIPropertyMetadata( 0.0 ) );
 		private static readonly DependencyPropertyKey OriginalYPropertyKey = DependencyProperty.RegisterAttachedReadOnly( "OriginalY", typeof( double ), typeof( DragBehaviour ), new UIPropertyMetadata( 0.0 ) );
 		#endregion
@@ -199,6 +199,7 @@ namespace WPFExtensions.AttachedBehaviours
 			SetX( obj, GetX( obj ) + horizontalChange );
 			SetY( obj, GetY( obj ) + verticalChange );
 
+			Debug.WriteLine( "Original position of object (" + obj + "): (" + GetX( obj ) + "," + GetY( obj ) + ")", "WPFExt" );
 			Debug.WriteLine( "Object (" + obj + ") has been dragged by (" + horizontalChange + "," + verticalChange + ")", "WPFExt" );
 		}
 	}
