@@ -23,5 +23,20 @@ namespace Samples
 		{
 			InitializeComponent();
 		}
+
+		public void ExecuteFirst( object sender, ExecutedRoutedEventArgs e )
+		{
+			MessageBox.Show( "Executing 1st command!" );
+		}
+
+		public void ExecuteSecond( object sender, ExecutedRoutedEventArgs e )
+		{
+			MessageBox.Show( "Executing 2nd command!" );
+		}
+
+		public void ExecuteThird( object sender, ExecutedRoutedEventArgs e )
+		{
+			MessageBox.Show( "Executing 3rd command!" );
+		}
 	}
 }
