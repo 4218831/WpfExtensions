@@ -4,9 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:extbehaviour="clr-namespace:WPFExtensions.AttachedBehaviours;assembly=WPFExtensions"
     xmlns:cmd="clr-namespace:WPFExtensions.ViewModel.Commanding;assembly=WPFExtensions"
+    xmlns:r="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
     xmlns:local="clr-namespace:Samples"
-    Title="Window1" Height="300" Width="300">
+    Title="Window1" Height="350" Width="400">
+
     <Window.Resources>
+
+        <!--Some styles, not so important-->
         <Style TargetType="{x:Type Label}">
             <Style.Triggers>
                 <Trigger Property="extbehaviour:DragBehaviour.IsDragEnabled" Value="True">
@@ -19,36 +23,123 @@
                     <Setter Property="Opacity" Value="0.7"/>
                 </Trigger>
             </Style.Triggers>
-        </Style>        
+        </Style>
+
+        <DrawingImage
+            x:Key="BlueEllipse">
+            <DrawingImage.Drawing>
+                <GeometryDrawing Brush="DarkBlue">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry
+                            RadiusX="10"
+                            RadiusY="20"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+        <DrawingImage
+            x:Key="RedEllipse">
+            <DrawingImage.Drawing>
+                <GeometryDrawing Brush="Red">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry
+                            RadiusX="20"
+                            RadiusY="10"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+        <DrawingImage
+            x:Key="GreenEllipse">
+            <DrawingImage.Drawing>
+                <GeometryDrawing Brush="Green">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry
+                            RadiusX="15"
+                            RadiusY="15"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <!--
+            RibbonCommands
+        I declare them as resources, so i can use them 
+        as StaticResources in the CommandBindings.
+        -->
+        <r:RibbonCommand
+            x:Key="FirstRCmd"
+            LabelTitle="1st Cmd"
+            LargeImageSource="{StaticResource BlueEllipse}"/>
+        <r:RibbonCommand
+            x:Key="SecondRCmd"
+            LabelTitle="2nd Cmd"
+            LargeImageSource="{StaticResource RedEllipse}"/>
+        <r:RibbonCommand
+            x:Key="ThirdRCmd"
+            LabelTitle="3rd Cmd"
+            LargeImageSource="{StaticResource GreenEllipse}"
+            ToolTipTitle="3rd Command mapped to the 1st Command"
+            ToolTipDescription="If you click on this button, the 1st command will be executed. Because the Ribbon Command mapped on the Third command which is mapped on the 1st command."/>
     </Window.Resources>
+
+
+    <!--CommandBindings (mapping of the RibbonCommands)-->
     <Window.CommandBindings>
+        <!--Binding the original commands-->
         <CommandBinding Command="{x:Static local:SampleCommands.First}" Executed="ExecuteFirst"/>
-        <cmd:MapperCommandBinding Command="{x:Static local:SampleCommands.Second}" MappedCommand="{x:Static local:SampleCommands.Third}"/>
+        <CommandBinding Command="{x:Static local:SampleCommands.Second}" Executed="ExecuteSecond"/>
+
+        <!--Mapping the RibbonCommands on the original commands-->
+
+        <!--Easy, good example-->
+        <cmd:MapperCommandBinding Command="{StaticResource SecondRCmd}" MappedCommand="{x:Static local:SampleCommands.Second}"/>
+
+        <!--
+            Bad way, mapping to a mapped command
+            It works, bot the code resembles a spaghetti.
+        
+            ThirdRCmd -> Third -> First -> Execute
+        -->
+        <cmd:MapperCommandBinding Command="{x:Static local:SampleCommands.Third}" MappedCommand="{x:Static local:SampleCommands.First}"/>
+        <cmd:MapperCommandBinding Command="{StaticResource ThirdRCmd}" MappedCommand="{x:Static local:SampleCommands.Third}"/>
+
+
+        <!--We put that to the end of the CommandBinding list, to see the bad way working-->
         <CommandBinding Command="{x:Static local:SampleCommands.Third}" Executed="ExecuteThird"/>
     </Window.CommandBindings>
-    <Canvas>
-        <Label Name="lblDraggable"
+
+
+
+    <DockPanel>
+
+        <!--Sample Ribbon for the MapperCommandBinding-->
+        <r:Ribbon DockPanel.Dock="Top">
+            <r:RibbonTab Label="Sample">
+                <r:RibbonGroup>
+                    <r:RibbonGroup.Command>
+                        <r:RibbonCommand
+                            LabelTitle="MapperCommandBinding"/>
+                    </r:RibbonGroup.Command>
+                    <r:RibbonButton Command="{StaticResource FirstRCmd}" />
+                    <r:RibbonButton Command="{StaticResource SecondRCmd}" />
+                    <r:RibbonButton Command="{StaticResource ThirdRCmd}" />
+                </r:RibbonGroup>
+            </r:RibbonTab>
+        </r:Ribbon>
+
+        <!--Sample for the attached Behaviours-->
+        <Canvas>
+            <Label Name="lblDraggable"
                Content="Hello, I'm Draggable" 
                extbehaviour:DragBehaviour.IsDragEnabled="True" 
                extbehaviour:DragBehaviour.X="{Binding RelativeSource={RelativeSource self},Path=(Canvas.Left)}"
                extbehaviour:DragBehaviour.Y="{Binding RelativeSource={RelativeSource self},Path=(Canvas.Top)}"
                Canvas.Left="0"
                Canvas.Top="{Binding ElementName=posSlider,Path=Value,Mode=TwoWay}">
-        </Label>
-        <Slider Name="posSlider" Minimum="0" Maximum="300" Value="50" Width="250"/>
-        <Label Content="Sorry, I'm not" Canvas.Bottom="0"/>
-        
-        <Button 
-            Content="1st Command"
-            Command="{x:Static local:SampleCommands.First}"
-            ToolTip="First command, not mapped to another command"
-            Canvas.Right="10"
-            Canvas.Top="100"/>
-        <Button 
-            Content="2nd Command Mapped to 3rd"
-            Command="{x:Static local:SampleCommands.Second}"
-            ToolTip="2nd command, mapped to the 3rd command!!!"
-            Canvas.Right="10"
-            Canvas.Top="150"/>
-    </Canvas>
+            </Label>
+            <Slider Name="posSlider" Minimum="0" Maximum="300" Value="50" Width="250"/>
+            <Label Content="Sorry, I'm not" Canvas.Bottom="0"/>
+        </Canvas>
+    </DockPanel>
 </Window>

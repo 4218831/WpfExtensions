@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFExtensions", "WPFExtensi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples.csproj", "{52F707B2-4C09-4E54-B09B-3A2FA00A48E2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{8334595E-CEA8-4F93-BCE3-2359F59556AF}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\RibbonControlsLibrary.dll = Libraries\RibbonControlsLibrary.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 3
