@@ -93,7 +93,7 @@
         <!--Mapping the RibbonCommands on the original commands-->
 
         <!--Easy, good example-->
-        <cmd:MapperCommandBinding Command="{StaticResource SecondRCmd}" MappedCommand="{x:Static local:SampleCommands.Second}"/>
+        <cmd:MapperCommandBinding Command="{StaticResource SecondRCmd}" MappedToCommand="{x:Static local:SampleCommands.Second}"/>
 
         <!--
             Bad way, mapping to a mapped command
@@ -101,8 +101,8 @@
         
             ThirdRCmd -> Third -> First -> Execute
         -->
-        <cmd:MapperCommandBinding Command="{x:Static local:SampleCommands.Third}" MappedCommand="{x:Static local:SampleCommands.First}"/>
-        <cmd:MapperCommandBinding Command="{StaticResource ThirdRCmd}" MappedCommand="{x:Static local:SampleCommands.Third}"/>
+        <cmd:MapperCommandBinding Command="{x:Static local:SampleCommands.Third}" MappedToCommand="{x:Static local:SampleCommands.First}"/>
+        <cmd:MapperCommandBinding Command="{StaticResource ThirdRCmd}" MappedToCommand="{x:Static local:SampleCommands.Third}"/>
 
 
         <!--We put that to the end of the CommandBinding list, to see the bad way working-->
