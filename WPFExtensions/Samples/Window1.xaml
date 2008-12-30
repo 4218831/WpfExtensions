@@ -6,7 +6,8 @@
     xmlns:cmd="clr-namespace:WPFExtensions.ViewModel.Commanding;assembly=WPFExtensions"
     xmlns:r="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
     xmlns:local="clr-namespace:Samples"
-    Title="Window1" Height="350" Width="400">
+    Title="Window1" Height="350" Width="400"
+    extbehaviour:WindowSettings.Save="True">
 
     <Window.Resources>
 

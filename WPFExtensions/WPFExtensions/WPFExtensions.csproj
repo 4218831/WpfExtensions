@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachedBehaviours\DragBehaviour.cs" />
+    <Compile Include="AttachedBehaviours\WindowSettings.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Helpers\ExtLogicalTreeHelper.cs" />
     <Compile Include="Helpers\ExtVisualTreeHelper.cs" />
