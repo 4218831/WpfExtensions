@@ -11,7 +11,8 @@ namespace Samples
 		public static readonly RoutedUICommand First = new RoutedUICommand( "First Command", "First", typeof( SampleCommands ) );
 		public static readonly RoutedUICommand Second = new RoutedUICommand( "Second Command", "Second", typeof( SampleCommands ) );
 		public static readonly RoutedUICommand Third = new RoutedUICommand( "Third Command", "Third", typeof( SampleCommands ) );
-
+		
+		public static readonly RoutedCommand TextBoxCommand = new RoutedCommand( "TextBoxCommand", typeof( SampleCommands ) );
 
 	}
 }

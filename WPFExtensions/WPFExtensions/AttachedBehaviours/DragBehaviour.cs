@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Diagnostics;
 
@@ -21,7 +18,7 @@ namespace WPFExtensions.AttachedBehaviours
 		#region Get/Set method for Attached Properties
 		public static bool GetIsDragEnabled( DependencyObject obj )
 		{
-			return ( bool )obj.GetValue( IsDragEnabledProperty );
+			return (bool)obj.GetValue( IsDragEnabledProperty );
 		}
 
 		public static void SetIsDragEnabled( DependencyObject obj, bool value )
@@ -31,7 +28,7 @@ namespace WPFExtensions.AttachedBehaviours
 
 		public static bool GetIsDragging( DependencyObject obj )
 		{
-			return ( bool )obj.GetValue( IsDraggingProperty );
+			return (bool)obj.GetValue( IsDraggingProperty );
 		}
 
 		public static void SetIsDragging( DependencyObject obj, bool value )
@@ -41,7 +38,7 @@ namespace WPFExtensions.AttachedBehaviours
 
 		public static double GetX( DependencyObject obj )
 		{
-			return ( double )obj.GetValue( XProperty );
+			return (double)obj.GetValue( XProperty );
 		}
 
 		public static void SetX( DependencyObject obj, double value )
@@ -51,7 +48,7 @@ namespace WPFExtensions.AttachedBehaviours
 
 		public static double GetY( DependencyObject obj )
 		{
-			return ( double )obj.GetValue( YProperty );
+			return (double)obj.GetValue( YProperty );
 		}
 
 		public static void SetY( DependencyObject obj, double value )
@@ -61,7 +58,7 @@ namespace WPFExtensions.AttachedBehaviours
 
 		private static double GetOriginalX( DependencyObject obj )
 		{
-			return ( double )obj.GetValue( OriginalXPropertyKey.DependencyProperty );
+			return (double)obj.GetValue( OriginalXPropertyKey.DependencyProperty );
 		}
 
 		private static void SetOriginalX( DependencyObject obj, double value )
@@ -71,7 +68,7 @@ namespace WPFExtensions.AttachedBehaviours
 
 		private static double GetOriginalY( DependencyObject obj )
 		{
-			return ( double )obj.GetValue( OriginalYPropertyKey.DependencyProperty );
+			return (double)obj.GetValue( OriginalYPropertyKey.DependencyProperty );
 		}
 
 		private static void SetOriginalY( DependencyObject obj, double value )
@@ -83,7 +80,7 @@ namespace WPFExtensions.AttachedBehaviours
 		#region PropertyChanged callbacks
 		private static void OnIsDragEnabledPropertyChanged( DependencyObject obj, DependencyPropertyChangedEventArgs e )
 		{
-			FrameworkElement element = obj as FrameworkElement;
+			var element = obj as FrameworkElement;
 			FrameworkContentElement contentElement = null;
 			if ( element == null )
 			{
@@ -95,7 +92,7 @@ namespace WPFExtensions.AttachedBehaviours
 			if ( e.NewValue is bool == false )
 				return;
 
-			if ( ( bool )e.NewValue )
+			if ( (bool)e.NewValue )
 			{
 				//register the event handlers
 				if ( element != null )
@@ -134,7 +131,7 @@ namespace WPFExtensions.AttachedBehaviours
 
 		private static void OnDragStarted( object sender, System.Windows.Input.MouseButtonEventArgs e )
 		{
-			DependencyObject obj = sender as DependencyObject;
+			var obj = sender as DependencyObject;
 			//we are starting the drag
 			SetIsDragging( obj, true );
 
@@ -147,7 +144,7 @@ namespace WPFExtensions.AttachedBehaviours
 			Debug.WriteLine( "Drag started on object: " + obj, "WPFExt" );
 
 			//capture the mouse
-			FrameworkElement element = obj as FrameworkElement;
+			var element = obj as FrameworkElement;
 			if ( element != null )
 			{
 				element.CaptureMouse();
@@ -155,7 +152,9 @@ namespace WPFExtensions.AttachedBehaviours
 			}
 			else
 			{
-				FrameworkContentElement contentElement = obj as FrameworkContentElement;
+				var contentElement = obj as FrameworkContentElement;
+				if ( contentElement == null )
+					throw new ArgumentException( "The control must be a descendent of the FrameworkElement or FrameworkContentElement!" );
 				contentElement.CaptureMouse();
 				contentElement.MouseMove += OnDragging;
 			}
@@ -163,7 +162,7 @@ namespace WPFExtensions.AttachedBehaviours
 
 		private static void OnDragFinished( object sender, System.Windows.Input.MouseButtonEventArgs e )
 		{
-			DependencyObject obj = sender as DependencyObject;
+			var obj = (DependencyObject)sender;
 			SetIsDragging( obj, false );
 			obj.ClearValue( OriginalXPropertyKey );
 			obj.ClearValue( OriginalYPropertyKey );
@@ -171,7 +170,7 @@ namespace WPFExtensions.AttachedBehaviours
 			Debug.WriteLine( "Drag finished on object: " + obj, "WPFExt" );
 
 			//we finished the drag, release the mouse
-			FrameworkElement element = sender as FrameworkElement;
+			var element = sender as FrameworkElement;
 			if ( element != null )
 			{
 				element.MouseMove -= OnDragging;
@@ -179,7 +178,9 @@ namespace WPFExtensions.AttachedBehaviours
 			}
 			else
 			{
-				FrameworkContentElement contentElement = sender as FrameworkContentElement;
+				var contentElement = sender as FrameworkContentElement;
+				if (contentElement == null)
+					throw new ArgumentException( "The control must be a descendent of the FrameworkElement or FrameworkContentElement!" );
 				contentElement.MouseMove -= OnDragging;
 				contentElement.ReleaseMouseCapture();
 			}
@@ -187,13 +188,13 @@ namespace WPFExtensions.AttachedBehaviours
 
 		private static void OnDragging( object sender, System.Windows.Input.MouseEventArgs e )
 		{
-			DependencyObject obj = sender as DependencyObject;
+			var obj = sender as DependencyObject;
 			if ( !GetIsDragging( obj ) )
 				return;
 
-			Point pos = e.GetPosition ( obj as IInputElement);
-			double horizontalChange = pos.X - GetOriginalX(obj);
-			double verticalChange = pos.Y - GetOriginalY(obj);
+			Point pos = e.GetPosition( obj as IInputElement );
+			double horizontalChange = pos.X - GetOriginalX( obj );
+			double verticalChange = pos.Y - GetOriginalY( obj );
 
 			//move the object
 			SetX( obj, GetX( obj ) + horizontalChange );

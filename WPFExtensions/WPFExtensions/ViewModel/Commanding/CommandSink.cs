@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 
 //The CommandSink concept is 'invented by' Josh Smith, a great WPF expert.
@@ -97,10 +95,8 @@ namespace WPFExtensions.ViewModel.Commanding
 					handled = true;
 					return _commandToCallbacksMap[command].CanExecute( parameter );
 				}
-				else
-				{
-					return ( handled = false );
-				}
+				
+				return ( handled = false );
 			}
 
 			public virtual void ExecuteCommand( ICommand command, object parameter, out bool handled )
@@ -139,8 +135,8 @@ namespace WPFExtensions.ViewModel.Commanding
 
 				public CommandCallbacks( Predicate<object> canExecute, Action<object> execute )
 				{
-					this.CanExecute = canExecute;
-					this.Execute = execute;
+					CanExecute = canExecute;
+					Execute = execute;
 				}
 			}
 

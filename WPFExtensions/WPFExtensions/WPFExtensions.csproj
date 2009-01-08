@@ -49,10 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachedBehaviours\DragBehaviour.cs" />
+    <Compile Include="AttachedBehaviours\FrameworkElementAttachedBehaviourBase.cs" />
+    <Compile Include="AttachedBehaviours\TextBoxCommandBehaviour.cs" />
+    <Compile Include="AttachedBehaviours\TreeViewSelectionBehaviour.cs" />
     <Compile Include="AttachedBehaviours\WindowSettings.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Helpers\ExtLogicalTreeHelper.cs" />
     <Compile Include="Helpers\ExtVisualTreeHelper.cs" />
+    <Compile Include="Helpers\TreeViewHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

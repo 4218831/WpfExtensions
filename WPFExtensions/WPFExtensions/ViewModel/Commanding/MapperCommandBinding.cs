@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using System.Windows;
 
@@ -10,7 +7,7 @@ namespace WPFExtensions.ViewModel.Commanding
 	public class MapperCommandBinding : CommandBinding
 	{
 
-		private ICommand _mappedToCommand = null;
+		private ICommand _mappedToCommand;
 
 		/// <summary>
 		/// The command which will executed instead of the 'Command'.
@@ -26,14 +23,14 @@ namespace WPFExtensions.ViewModel.Commanding
 
 				if ( _mappedToCommand != null )
 				{
-					this.CanExecute -= OnCanExecute;
-					this.Executed -= OnExecuted;
+					CanExecute -= OnCanExecute;
+					Executed -= OnExecuted;
 				}
 
-				this._mappedToCommand = value;
+				_mappedToCommand = value;
 
-				this.CanExecute += OnCanExecute;
-				this.Executed += OnExecuted;
+				CanExecute += OnCanExecute;
+				Executed += OnExecuted;
 			}
 		}
 
