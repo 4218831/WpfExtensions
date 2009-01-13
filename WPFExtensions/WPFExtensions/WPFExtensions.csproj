@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A7915102-8326-4862-96F0-4EB80ED087B4}</ProjectGuid>
     <OutputType>library</OutputType>
@@ -48,6 +48,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachedBehaviours\AnimatedScrollBehaviour.cs" />
     <Compile Include="AttachedBehaviours\DragBehaviour.cs" />
     <Compile Include="AttachedBehaviours\FrameworkElementAttachedBehaviourBase.cs" />
     <Compile Include="AttachedBehaviours\TextBoxCommandBehaviour.cs" />

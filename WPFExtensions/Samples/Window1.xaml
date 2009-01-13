@@ -162,12 +162,12 @@
                 </Canvas>
             </TabItem>
 
-            <!--TreeViewSelectionBehaviour-->
+            <!--TreeViewSelectionBehaviour & AnimatedScrollBehaviour-->
             <TabItem>
                 <TabItem.Header>
                     <TextBlock>
                         <Run Background="Yellow">NEW</Run>
-                        <Run>TreeViewSelectionBehaviour</Run>
+                        <Run>TreeViewSelectionBehaviour &amp; AnimatedScrollBehaviour</Run>
                     </TextBlock>
                 </TabItem.Header>
                 <DockPanel>
@@ -198,15 +198,45 @@
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <TextBlock DockPanel.Dock="Top">
+                            <StackPanel DockPanel.Dock="Top">
+                                <TextBlock>
                                 Select something from the TreeView in the right, 
                                 and the TreeView below will be scrolled to the selected element automatically.
-                            </TextBlock>
+                                </TextBlock>
+                                <UniformGrid Columns="2" Margin="5">
+                                    <TextBlock Text="Animation" />
+                                    <CheckBox x:Name="cbAnimatingEnabled"
+                                              IsChecked="True"
+                                              Content="{Binding RelativeSource={RelativeSource Self},Path=IsChecked,Mode=OneWay}"/>
+                                    <TextBlock Text="Duration" />
+                                    <TextBox x:Name="txtDuration"
+                                             Text="0:0:2.000"/>
+                                    <TextBlock Text="Acceleration" />
+                                    <TextBox x:Name="txtAcc"
+                                             Text="0.5" />
+                                    <TextBlock Text="Deceleration" />
+                                    <TextBox x:Name="txtDec"
+                                             Text="0.5" />
+                                </UniformGrid>
+                            </StackPanel>
                             <ContentControl Content="{Binding ElementName=originalTv,Path=SelectedItem}"
                                             DockPanel.Dock="Bottom" />
                             <TreeView x:Name="originalTv"
                                       ItemsSource="{Binding Items}"
-                                      extbehaviour:TreeViewSelectionBehaviour.AutomaticBringIntoViewSelectedItem="True" />
+                                      extbehaviour:TreeViewSelectionBehaviour.AutomaticBringIntoViewSelectedItem="True">
+                                <TreeView.Resources>
+                                    <Style TargetType="{x:Type ScrollViewer}">
+                                        <Setter Property="extbehaviour:AnimatedScrollBehaviour.Enabled"
+                                                Value="{Binding ElementName=cbAnimatingEnabled,Path=IsChecked,Mode=OneWay}" />
+                                        <Setter Property="extbehaviour:AnimatedScrollBehaviour.Duration"
+                                                Value="{Binding ElementName=txtDuration,Path=Text,Mode=OneWay}" />
+                                        <Setter Property="extbehaviour:AnimatedScrollBehaviour.AccelerationRatio"
+                                                Value="0.5" />
+                                        <Setter Property="extbehaviour:AnimatedScrollBehaviour.DecelerationRatio"
+                                                Value="0.5" />
+                                    </Style>
+                                </TreeView.Resources>
+                            </TreeView>
                         </DockPanel>
 
                         <TreeView Grid.Column="1"
