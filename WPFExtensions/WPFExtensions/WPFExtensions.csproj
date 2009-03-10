@@ -54,6 +54,10 @@
     <Compile Include="AttachedBehaviours\TextBoxCommandBehaviour.cs" />
     <Compile Include="AttachedBehaviours\TreeViewSelectionBehaviour.cs" />
     <Compile Include="AttachedBehaviours\WindowSettings.cs" />
+    <Compile Include="Collections\ObjectModel\DispatchedObservableCollection.cs" />
+    <Compile Include="Collections\ObjectModel\DispatchEvent.cs" />
+    <Compile Include="Collections\ObjectModel\DispatchHandler.cs" />
+    <Compile Include="Collections\ObjectModel\ReadOnlyDispatchedObservableCollection.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Helpers\ExtLogicalTreeHelper.cs" />
     <Compile Include="Helpers\ExtVisualTreeHelper.cs" />
@@ -78,6 +82,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="AttachedBehaviours.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

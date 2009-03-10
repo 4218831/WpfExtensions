@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +12,18 @@ namespace WPFExtensions.AttachedBehaviours
 	public class TreeViewSelectionBehaviour : FrameworkElementAttachedBehaviourBase<TreeView>
 	{
 		#region Attached Dependency Properties
+		private static void ManageAttach( DependencyObject d )
+		{
+			var tv = d as TreeView;
+			if ( tv == null )
+				return;
+			var shouldAttach = GetAutomaticBringIntoViewSelectedItem( tv ) || GetManageSelectedItemRoute( tv );
 
+			if ( shouldAttach )
+				Attach<TreeViewSelectionBehaviour>( tv );
+			else
+				Detach<TreeViewSelectionBehaviour>( tv );
+		}
 
 
 		public static bool GetAutomaticBringIntoViewSelectedItem( DependencyObject obj )
@@ -28,80 +40,61 @@ namespace WPFExtensions.AttachedBehaviours
 		public static readonly DependencyProperty AutomaticBringIntoViewSelectedItemProperty =
 			DependencyProperty.RegisterAttached( "AutomaticBringIntoViewSelectedItem", typeof( bool ), typeof( TreeViewSelectionBehaviour ), new UIPropertyMetadata( false, AutomaticBringIntoViewSelectedItem_PropertyChanged ) );
 
-		private static void AutomaticBringIntoViewSelectedItem_PropertyChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+		private static void AutomaticBringIntoViewSelectedItem_PropertyChanged( DependencyObject obj, DependencyPropertyChangedEventArgs e )
 		{
-			var treeView = d as TreeView;
-			if ( treeView == null )
-				return;
-
-			if ( GetAutomaticBringIntoViewSelectedItem( treeView ) )
-				Attach<TreeViewSelectionBehaviour>( treeView );
-			else
-				Detach<TreeViewSelectionBehaviour>( treeView );
+			ManageAttach( obj );
 		}
 
 
-		//[AttachedPropertyBrowsableForType( typeof( TreeView ) )]
-		//public static bool GetManageSelection( DependencyObject obj )
-		//{
-		//    return (bool)obj.GetValue( ManageSelectionProperty );
-		//}
+		[AttachedPropertyBrowsableForType( typeof( TreeView ) )]
+		public static bool GetManageSelectedItemRoute( DependencyObject obj )
+		{
+			return (bool)obj.GetValue( ManageSelectedItemRouteProperty );
+		}
 
-		//public static void SetManageSelection( DependencyObject obj, bool value )
-		//{
-		//    obj.SetValue( ManageSelectionProperty, value );
-		//}
+		public static void SetManageSelectedItemRoute( DependencyObject obj, bool value )
+		{
+			obj.SetValue( ManageSelectedItemRouteProperty, value );
+		}
 
-		//// Using a DependencyProperty as the backing store for ManagedSelection.  This enables animation, styling, binding, etc...
-		//public static readonly DependencyProperty ManageSelectionProperty =
-		//    DependencyProperty.RegisterAttached( "ManageSelection", typeof( bool ), typeof( TreeViewSelectionBehaviour ), new UIPropertyMetadata( false, ManageSelection_PropertyChanged ) );
+		// Using a DependencyProperty as the backing store for ManagedSelection.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty ManageSelectedItemRouteProperty =
+			DependencyProperty.RegisterAttached( "ManageSelectedItemRoute", typeof( bool ), typeof( TreeViewSelectionBehaviour ), new UIPropertyMetadata( false, ManageSelectedItemRoute_PropertyChanged ) );
 
-		//private static void ManageSelection_PropertyChanged( DependencyObject obj, DependencyPropertyChangedEventArgs e )
-		//{
-		//    var treeView = obj as TreeView;
-		//    if ( treeView == null )
-		//        return;
+		private static void ManageSelectedItemRoute_PropertyChanged( DependencyObject obj, DependencyPropertyChangedEventArgs e )
+		{
+			ManageAttach( obj );
+		}
 
-		//    var manageSelection = (bool)e.NewValue;
+		public static IEnumerable<object> GetSelectedItemRoute( DependencyObject obj )
+		{
+			return (IEnumerable<object>)obj.GetValue( SelectedItemRouteProperty );
+		}
 
-		//    if ( manageSelection )
-		//        Attach<TreeViewSelectionBehaviour>( treeView );
-		//    else
-		//        Detach<TreeViewSelectionBehaviour>( treeView );
-		//}
+		public static void SetSelectedItemRoute( DependencyObject obj, IEnumerable<object> value )
+		{
+			obj.SetValue( SelectedItemRouteProperty, value );
+		}
 
+		// Using a DependencyProperty as the backing store for SelectedItemRoute.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty SelectedItemRouteProperty =
+			DependencyProperty.RegisterAttached( "SelectedItemRoute", typeof( IEnumerable<object> ), typeof( TreeViewSelectionBehaviour ), new UIPropertyMetadata( null, null, SelectedItemRoute_Coerce ) );
 
-		//public static IEnumerable<object> GetSelectedItemRoute( DependencyObject obj )
-		//{
-		//    return (IEnumerable<object>)obj.GetValue( SelectedItemRouteProperty );
-		//}
+		private static object SelectedItemRoute_Coerce( DependencyObject d, object baseValue )
+		{
+			var treeView = (TreeView)d;
+			var helper = Get<TreeViewSelectionBehaviour>( treeView );
+			if ( helper == null )
+				return SelectedItemRouteProperty.DefaultMetadata.DefaultValue;
 
-		//public static void SetSelectedItemRoute( DependencyObject obj, IEnumerable<object> value )
-		//{
-		//    obj.SetValue( SelectedItemRouteProperty, value );
-		//}
+			if ( helper.allowSelectedItemRouteChange || SelectedItemRouteProperty.DefaultMetadata.DefaultValue == baseValue )
+				return baseValue;
 
-		//// Using a DependencyProperty as the backing store for SelectedItemRoute.  This enables animation, styling, binding, etc...
-		//public static readonly DependencyProperty SelectedItemRouteProperty =
-		//    DependencyProperty.RegisterAttached( "SelectedItemRoute", typeof( IEnumerable<object> ), typeof( TreeViewSelectionBehaviour ), new UIPropertyMetadata( null, SelectedItemRoute_PropertyChanged ) );
-
-		//private static void SelectedItemRoute_PropertyChanged( DependencyObject obj, DependencyPropertyChangedEventArgs e )
-		//{
-		//    var treeView = obj as TreeView;
-		//    if ( treeView == null )
-		//        return;
-
-		//    var helper = Get<TreeViewSelectionBehaviour>( treeView );
-		//    if ( helper == null || helper.denySelectedItemChange )
-		//        return;
-
-		//    //expand the TreeView and set the according TreeViewItem's IsSelected property to 'True'
-		//    var nodeRoute = e.NewValue as IEnumerable<object>;
-		//    helper.ChangeRoute( nodeRoute );
-		//}
+			throw new NotSupportedException( "This is a one-way dependency property (it behaves like a read-only dependency property, but it can be bound with [Mode=OneWayToSource])." );
+		}
 		#endregion
 
-		//private bool denySelectedItemChange = false;
+		private bool allowSelectedItemRouteChange = false;
 
 		public TreeViewSelectionBehaviour( TreeView treeView )
 			: base( treeView )
@@ -122,11 +115,19 @@ namespace WPFExtensions.AttachedBehaviours
 		{
 			Debug.Assert( Element == sender, "The SelectedItemChanged event wasn't generated by the attached TreeView!" );
 
-			if ( GetAutomaticBringIntoViewSelectedItem( Element ) )
+			var selectedTreeViewItem = Element.FindContainerHierarchically<TreeViewItem>( Element.SelectedItem );
+			if ( selectedTreeViewItem != null )
 			{
-				var selectedTreeViewItem = Element.FindTreeViewItemFor( Element.SelectedItem );
-				if ( selectedTreeViewItem != null )
+				if ( GetAutomaticBringIntoViewSelectedItem( Element ) )
 					selectedTreeViewItem.BringIntoView();
+
+				if ( GetAutomaticBringIntoViewSelectedItem( Element ) ||
+					GetManageSelectedItemRoute( Element ) )
+				{
+					allowSelectedItemRouteChange = true;
+					SetSelectedItemRoute( Element, selectedTreeViewItem.GetItemRouteFromTreeViewItem() );
+					allowSelectedItemRouteChange = false;
+				}
 			}
 		}
 	}

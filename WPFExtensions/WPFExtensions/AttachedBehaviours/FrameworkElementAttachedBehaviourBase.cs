@@ -34,6 +34,14 @@ namespace WPFExtensions.AttachedBehaviours
 			return ext;
 		}
 
+		/// <summary>
+		/// If attaches the behaviour to the FrameworkElement.
+		/// If it were attached already, it returs with the attached behaviour instance.
+		/// Otherwise it creates a new instance.
+		/// </summary>
+		/// <typeparam name="TAttachment"></typeparam>
+		/// <param name="element"></param>
+		/// <returns></returns>
 		public static TAttachment Attach<TAttachment>( T element )
 			where TAttachment : FrameworkElementAttachedBehaviourBase<T>
 		{

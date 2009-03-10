@@ -9,6 +9,7 @@
         Title="Window1"
         Height="350"
         Width="400"
+        cmd:CommandSinkBinding.CommandSink="{Binding}"
         extbehaviour:WindowSettings.Save="True">
 
     <Window.Resources>
@@ -100,6 +101,8 @@
                         Executed="ExecuteSecond" />
         <CommandBinding Command="{x:Static local:SampleCommands.TextBoxCommand}"
                         Executed="TextBoxCommand_Execute" />
+        <cmd:CommandSinkBinding Command="{x:Static local:SampleDataContext.ExpandTreeView}" />
+        <cmd:CommandSinkBinding Command="{x:Static local:SampleDataContext.AddItems}" />
 
         <!--Mapping the RibbonCommands on the original commands-->
 
@@ -163,7 +166,7 @@
             </TabItem>
 
             <!--TreeViewSelectionBehaviour & AnimatedScrollBehaviour-->
-            <TabItem>
+            <TabItem DataContext="{Binding TreeViewDS}">
                 <TabItem.Header>
                     <TextBlock>
                         <Run Background="Yellow">NEW</Run>
@@ -174,9 +177,7 @@
                     <StackPanel Orientation="Horizontal"
                                 DockPanel.Dock="Top">
                         <Button Content="Expand All"
-                                Click="btnExpandAll_Click" />
-                        <Button Content="Select the 3 - 3 - 3"
-                                Click="btnSelectOne_Click" />
+                                Command="{x:Static local:SampleDataContext.ExpandTreeView}" />
                     </StackPanel>
                     <Grid>
                         <Grid.Resources>
@@ -203,14 +204,15 @@
                                 Select something from the TreeView in the right, 
                                 and the TreeView below will be scrolled to the selected element automatically.
                                 </TextBlock>
-                                <UniformGrid Columns="2" Margin="5">
+                                <UniformGrid Columns="2"
+                                             Margin="5">
                                     <TextBlock Text="Animation" />
                                     <CheckBox x:Name="cbAnimatingEnabled"
                                               IsChecked="True"
-                                              Content="{Binding RelativeSource={RelativeSource Self},Path=IsChecked,Mode=OneWay}"/>
+                                              Content="{Binding RelativeSource={RelativeSource Self},Path=IsChecked,Mode=OneWay}" />
                                     <TextBlock Text="Duration" />
                                     <TextBox x:Name="txtDuration"
-                                             Text="0:0:2.000"/>
+                                             Text="0:0:2.000" />
                                     <TextBlock Text="Acceleration" />
                                     <TextBox x:Name="txtAcc"
                                              Text="0.5" />
@@ -219,11 +221,12 @@
                                              Text="0.5" />
                                 </UniformGrid>
                             </StackPanel>
-                            <ContentControl Content="{Binding ElementName=originalTv,Path=SelectedItem}"
-                                            DockPanel.Dock="Bottom" />
+                            <ItemsControl x:Name="treeViewRouteControl"
+                                          DockPanel.Dock="Bottom" />
                             <TreeView x:Name="originalTv"
                                       ItemsSource="{Binding Items}"
-                                      extbehaviour:TreeViewSelectionBehaviour.AutomaticBringIntoViewSelectedItem="True">
+                                      extbehaviour:TreeViewSelectionBehaviour.AutomaticBringIntoViewSelectedItem="True"
+                                      extbehaviour:TreeViewSelectionBehaviour.SelectedItemRoute="{Binding ElementName=treeViewRouteControl,Path=ItemsSource,Mode=OneWayToSource}">
                                 <TreeView.Resources>
                                     <Style TargetType="{x:Type ScrollViewer}">
                                         <Setter Property="extbehaviour:AnimatedScrollBehaviour.Enabled"
@@ -265,6 +268,27 @@
                                  extbehaviour:TextBoxCommandBehaviour.CommandParameter="{Binding RelativeSource={RelativeSource Self},Path=Text}" />
                     </UniformGrid>
                 </StackPanel>
+            </TabItem>
+
+            <!--DispatchedObservableCollection-->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run Background="Yellow">NEW</Run>
+                        <Run>DispatchedObservableCollection</Run>
+                    </TextBlock>
+                </TabItem.Header>
+                <DockPanel>
+                    <Button Command="{x:Static local:SampleDataContext.AddItems}"
+                            DockPanel.Dock="Top"
+                            Content="Add items on background thread"/>
+                    
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding ObservableInts}">
+
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
             </TabItem>
         </TabControl>
     </DockPanel>

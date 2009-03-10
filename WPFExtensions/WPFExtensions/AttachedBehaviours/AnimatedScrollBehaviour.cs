@@ -79,8 +79,10 @@ namespace WPFExtensions.AttachedBehaviours
 			if ( asb == null )
 				return;
 
-			Debug.WriteLine( "Horizontal offset:" + e.NewValue );
-			asb.lastHorizontalOffset = (double)e.NewValue;
+			lock ( asb )
+			{
+				asb.lastHorizontalOffset = (double)e.NewValue;
+			}
 			asb.Element.ScrollToHorizontalOffset( asb.lastHorizontalOffset );
 		}
 
@@ -109,8 +111,10 @@ namespace WPFExtensions.AttachedBehaviours
 			if ( asb == null )
 				return;
 
-			Debug.WriteLine( "Vertical offset:" + e.NewValue );
-			asb.lastVerticalOffset = (double)e.NewValue;
+			lock ( asb )
+			{
+				asb.lastVerticalOffset = (double)e.NewValue;
+			}
 			asb.Element.ScrollToVerticalOffset( asb.lastVerticalOffset );
 		}
 
@@ -163,6 +167,8 @@ namespace WPFExtensions.AttachedBehaviours
 
 		protected override void OnAttach()
 		{
+			lastHorizontalOffset = Element.HorizontalOffset;
+			lastVerticalOffset = Element.VerticalOffset;
 			Element.ScrollChanged += ScrollChanged;
 			Element.PreviewMouseWheel += MouseWheelActivated;
 		}
@@ -176,14 +182,45 @@ namespace WPFExtensions.AttachedBehaviours
 		protected override void OnDetach()
 		{
 			Element.ScrollChanged -= ScrollChanged;
+			Element.RequestBringIntoView += new RequestBringIntoViewEventHandler( Element_RequestBringIntoView );
+		}
+
+		void Element_RequestBringIntoView( object sender, RequestBringIntoViewEventArgs e )
+		{
+			
 		}
 
 		private void ScrollChanged( object sender, ScrollChangedEventArgs e )
 		{
 			var enableAnimation = !Element.IsKeyboardFocusWithin && !Element.IsMouseCaptureWithin && !mouseWheelActivated && ( DateTime.Now - mouseWheelActivationTime > mouseWheelTrigger );
-			if ( verticalAnimationEnded && enableAnimation && Math.Abs( e.VerticalOffset - lastVerticalOffset ) > double.Epsilon )
+			if ( !enableAnimation )
+				return;
+
+			//new animation should be started?
+			if ( Math.Abs( e.VerticalOffset - lastVerticalOffset ) > double.Epsilon ||
+				Math.Abs( e.HorizontalOffset - lastHorizontalOffset ) > double.Epsilon )
 			{
-				Debug.WriteLine( "Start vertical animation: o {" + e.VerticalOffset + "} c {" + e.VerticalChange + "}" );
+				Debug.WriteLine( string.Format( "Clearing: {0}, {1};   {2}, {3}", e.VerticalOffset, lastVerticalOffset,
+											  e.HorizontalOffset, lastHorizontalOffset ) );
+				if ( horizontalAnimation != null )
+					horizontalAnimation.Completed -= OnHorizontalAnimationEnded;
+				if ( verticalAnimation != null )
+					verticalAnimation.Completed -= OnVerticalAnimationEnded;
+				//yes, so clear the old one
+				Element.BeginAnimation( HorizontalOffsetProperty, null, HandoffBehavior.SnapshotAndReplace );
+				Element.BeginAnimation( VerticalOffsetProperty, null, HandoffBehavior.SnapshotAndReplace );
+				horizontalAnimationEnded = true;
+				verticalAnimationEnded = true;
+				Debug.WriteLine( string.Format( "Clearing: {0}, {1};   {2}, {3}", e.VerticalOffset, lastVerticalOffset,
+											  e.HorizontalOffset, lastHorizontalOffset ) );
+			}
+
+			//Debug.WriteLine( string.Format( "Checkit: {0}, {1};   {2}, {3}", e.VerticalOffset, lastVerticalOffset, e.HorizontalOffset, lastHorizontalOffset ) );
+
+			if ( verticalAnimationEnded && Math.Abs( e.VerticalOffset - lastVerticalOffset ) > double.Epsilon )
+			{
+				Debug.WriteLine( "Start vertical animation: o {" + e.VerticalOffset + "} c {" + e.VerticalChange + "} l {" +
+								lastVerticalOffset + "}" );
 				verticalAnimation = new DoubleAnimation( e.VerticalOffset - e.VerticalChange, e.VerticalOffset,
 														GetDuration( Element ), FillBehavior.HoldEnd )
 										{
@@ -192,12 +229,14 @@ namespace WPFExtensions.AttachedBehaviours
 										};
 				verticalAnimation.Completed += OnVerticalAnimationEnded;
 				verticalAnimationEnded = false;
-				Element.BeginAnimation( AnimatedScrollBehaviour.VerticalOffsetProperty, verticalAnimation );
+				Element.BeginAnimation( VerticalOffsetProperty, verticalAnimation,
+									   HandoffBehavior.SnapshotAndReplace );
 			}
 
-			if ( horizontalAnimationEnded && enableAnimation && Math.Abs( e.HorizontalOffset - lastHorizontalOffset ) > double.Epsilon )
+			if ( horizontalAnimationEnded && Math.Abs( e.HorizontalOffset - lastHorizontalOffset ) > double.Epsilon )
 			{
-				Debug.WriteLine( "Start horizontal animation: o {" + e.HorizontalOffset + "} c {" + e.HorizontalChange + "}" );
+				Debug.WriteLine( "Start horizontal animation: o {" + e.HorizontalOffset + "} c {" + e.HorizontalChange + "} l {" +
+								lastHorizontalOffset + "}" );
 				horizontalAnimation = new DoubleAnimation( e.HorizontalOffset - e.HorizontalChange, e.HorizontalOffset,
 														  GetDuration( Element ), FillBehavior.HoldEnd )
 										{
@@ -206,7 +245,8 @@ namespace WPFExtensions.AttachedBehaviours
 										};
 				horizontalAnimation.Completed += OnHorizontalAnimationEnded;
 				horizontalAnimationEnded = false;
-				Element.BeginAnimation( AnimatedScrollBehaviour.HorizontalOffsetProperty, horizontalAnimation );
+				Element.BeginAnimation( HorizontalOffsetProperty, horizontalAnimation,
+									   HandoffBehavior.SnapshotAndReplace );
 			}
 			mouseWheelActivated = false;
 		}
@@ -215,7 +255,7 @@ namespace WPFExtensions.AttachedBehaviours
 		{
 			horizontalAnimationEnded = true;
 			var last = lastHorizontalOffset;
-			Element.BeginAnimation( AnimatedScrollBehaviour.HorizontalOffsetProperty, null );
+			Element.BeginAnimation( HorizontalOffsetProperty, null );
 			SetHorizontalOffset( Element, last );
 		}
 
@@ -223,7 +263,7 @@ namespace WPFExtensions.AttachedBehaviours
 		{
 			verticalAnimationEnded = true;
 			var last = lastVerticalOffset;
-			Element.BeginAnimation( AnimatedScrollBehaviour.VerticalOffsetProperty, null );
+			Element.BeginAnimation( VerticalOffsetProperty, null );
 			SetVerticalOffset( Element, last );
 		}
 	}
