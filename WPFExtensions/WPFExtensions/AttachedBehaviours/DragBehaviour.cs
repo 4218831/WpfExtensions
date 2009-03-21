@@ -196,6 +196,11 @@ namespace WPFExtensions.AttachedBehaviours
 			double horizontalChange = pos.X - GetOriginalX( obj );
 			double verticalChange = pos.Y - GetOriginalY( obj );
 
+            if ( double.IsNaN( GetX( obj ) ) )
+                SetX(obj, 0);
+            if ( double.IsNaN( GetY( obj ) ) )
+                SetY( obj, 0 );
+
 			//move the object
 			SetX( obj, GetX( obj ) + horizontalChange );
 			SetY( obj, GetY( obj ) + verticalChange );
