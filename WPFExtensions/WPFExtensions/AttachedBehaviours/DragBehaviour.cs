@@ -158,6 +158,7 @@ namespace WPFExtensions.AttachedBehaviours
 				contentElement.CaptureMouse();
 				contentElement.MouseMove += OnDragging;
 			}
+		    e.Handled = true;
 		}
 
 		private static void OnDragFinished( object sender, System.Windows.Input.MouseButtonEventArgs e )
@@ -184,6 +185,7 @@ namespace WPFExtensions.AttachedBehaviours
 				contentElement.MouseMove -= OnDragging;
 				contentElement.ReleaseMouseCapture();
 			}
+		    e.Handled = true;
 		}
 
 		private static void OnDragging( object sender, System.Windows.Input.MouseEventArgs e )
@@ -205,8 +207,7 @@ namespace WPFExtensions.AttachedBehaviours
 			SetX( obj, GetX( obj ) + horizontalChange );
 			SetY( obj, GetY( obj ) + verticalChange );
 
-			Debug.WriteLine( "Original position of object (" + obj + "): (" + GetX( obj ) + "," + GetY( obj ) + ")", "WPFExt" );
-			Debug.WriteLine( "Object (" + obj + ") has been dragged by (" + horizontalChange + "," + verticalChange + ")", "WPFExt" );
+		    e.Handled = true;
 		}
 	}
 }
