@@ -481,11 +481,9 @@ namespace WPFExtensions.Controls
             zc._scaleTransform.ScaleY = zoom;
             if (!zc._isZooming)
             {
-                zc.TranslateX = zc.GetCoercedTranslateX(zc.TranslateX, zoom);
-                zc.TranslateY = zc.GetCoercedTranslateY(zc.TranslateY, zoom);
-                /*double delta = (double)e.NewValue / (double)e.OldValue;
+                double delta = (double)e.NewValue / (double)e.OldValue;
                 zc.TranslateX *= delta;
-                zc.TranslateY *= delta;*/
+                zc.TranslateY *= delta;
                 zc.Mode = ZoomControlModes.Custom;
             }
         }
@@ -624,6 +622,11 @@ namespace WPFExtensions.Controls
                                                  if (Mode == ZoomControlModes.Fill)
                                                      DoZoomToFill();
                                              };
+                Presenter.ContentSizeChanged += (s, a) =>
+                {
+                    if (Mode == ZoomControlModes.Fill)
+                        DoZoomToFill();
+                };
             }
             ZoomToFill();
         }

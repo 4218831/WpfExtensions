@@ -10,12 +10,21 @@ namespace WPFExtensions.Controls
 {
     public class ZoomContentPresenter : ContentPresenter
     {
+        public event ContentSizeChangedHandler ContentSizeChanged;
+
         private Size _contentSize;
 
         public Size ContentSize
         {
             get { return _contentSize; }
-            private set { _contentSize = value; }
+            private set {
+                if (value == _contentSize)
+                    return;
+
+                _contentSize = value;
+                if (ContentSizeChanged != null)
+                    ContentSizeChanged(this, _contentSize);
+            }
         }
 
         protected override Size MeasureOverride(Size constraint)
@@ -38,11 +47,6 @@ namespace WPFExtensions.Controls
             //set the ContentSize
             ContentSize = child.DesiredSize;
             child.Arrange(new Rect(child.DesiredSize));
-
-            ////set the RenderTransformOrigin
-            //var x = arrangeBounds.Width <= 0 ? 0 : ContentSize.Width / arrangeBounds.Width / 2.0;
-            //var y = arrangeBounds.Height <= 0 ? 0 : ContentSize.Height / arrangeBounds.Height / 2.0;
-            //RenderTransformOrigin = new Point(x, y);
 
             return arrangeBounds;
         }

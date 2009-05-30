@@ -67,7 +67,8 @@
     <Compile Include="Collections\ObjectModel\DispatchEvent.cs" />
     <Compile Include="Collections\ObjectModel\DispatchHandler.cs" />
     <Compile Include="Collections\ObjectModel\ReadOnlyDispatchedObservableCollection.cs" />
-    <Compile Include="Controls\ZoomContentControl.cs" />
+    <Compile Include="Controls\ContentSizeChangedDelegate.cs" />
+    <Compile Include="Controls\ZoomContentPresenter.cs" />
     <Compile Include="Controls\ZoomControl.cs" />
     <Compile Include="Controls\ZoomControlModes.cs" />
     <Compile Include="Controls\ZoomViewModifierMode.cs" />
