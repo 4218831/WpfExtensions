@@ -12,6 +12,10 @@ namespace WPFExtensions.Controls
     {
         private const string PART_Presenter = "PART_Presenter";
 
+        public static readonly DependencyProperty HideZoomProperty =
+            DependencyProperty.Register("HideZoom", typeof(Visibility), typeof(ZoomControl),
+                                        new UIPropertyMetadata(Visibility.Visible));
+
         public static readonly DependencyProperty AnimationLengthProperty =
             DependencyProperty.Register("AnimationLength", typeof(TimeSpan), typeof(ZoomControl),
                                         new UIPropertyMetadata(TimeSpan.FromMilliseconds(500)));

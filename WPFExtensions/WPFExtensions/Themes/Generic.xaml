@@ -26,7 +26,8 @@
                                     Background="#88C0C0C0"
                                     Canvas.Left="20"
                                     Canvas.Top="20"
-                                    ToolTipService.InitialShowDelay="0">
+                                    ToolTipService.InitialShowDelay="0"
+                                    Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:ZoomControl}}, Path=HideZoom}">
                                 <Border.ToolTip>
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock><Run FontWeight="Bold">CTRL + Wheel:</Run> Zoom In / Out</TextBlock>
