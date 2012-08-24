@@ -1,0 +1,18 @@
+
+# Standard VS.NET and ReSharper Foo
+
+WPFExtensions/*/obj
+WPFExtensions/*/bin
+*.csproj.user
+*ReSharper.user
+_ReSharper*
+*resharper*
+*.suo
+*.cache
+* Thumbs.db
+
+#leftovers from merge
+*.orig
+*.bak
+*.sln.DotSettings.user
+*.DotSettings.user
