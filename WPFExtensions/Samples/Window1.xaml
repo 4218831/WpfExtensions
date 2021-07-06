@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:extbehaviour="clr-namespace:WPFExtensions.AttachedBehaviours;assembly=WPFExtensions"
         xmlns:cmd="clr-namespace:WPFExtensions.ViewModel.Commanding;assembly=WPFExtensions"
-        xmlns:r="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
         xmlns:local="clr-namespace:Samples"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:Controls="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions"
@@ -80,7 +79,7 @@
         I declare them as resources, so i can use them 
         as StaticResources in the CommandBindings.
         -->
-        <r:RibbonCommand x:Key="FirstRCmd"
+        <!--<r:RibbonCommand x:Key="FirstRCmd"
                          LabelTitle="1st Cmd"
                          LargeImageSource="{StaticResource BlueEllipse}" />
         <r:RibbonCommand x:Key="SecondRCmd"
@@ -90,7 +89,7 @@
                          LabelTitle="3rd Cmd"
                          LargeImageSource="{StaticResource GreenEllipse}"
                          ToolTipTitle="3rd Command mapped to the 1st Command"
-                         ToolTipDescription="If you click on this button, the 1st command will be executed. Because the Ribbon Command mapped on the Third command which is mapped on the 1st command." />
+                         ToolTipDescription="If you click on this button, the 1st command will be executed. Because the Ribbon Command mapped on the Third command which is mapped on the 1st command." />-->
     </Window.Resources>
 
     <!--CommandBindings (mapping of the RibbonCommands)-->
@@ -108,8 +107,8 @@
         <!--Mapping the RibbonCommands on the original commands-->
 
         <!--Easy, good example-->
-        <cmd:MapperCommandBinding Command="{StaticResource SecondRCmd}"
-                                  MappedToCommand="{x:Static local:SampleCommands.Second}" />
+        <!--<cmd:MapperCommandBinding Command="{StaticResource SecondRCmd}"
+                                  MappedToCommand="{x:Static local:SampleCommands.Second}" />-->
 
         <!--
             Bad way, mapping to a mapped command
@@ -119,8 +118,8 @@
         -->
         <cmd:MapperCommandBinding Command="{x:Static local:SampleCommands.Third}"
                                   MappedToCommand="{x:Static local:SampleCommands.First}" />
-        <cmd:MapperCommandBinding Command="{StaticResource ThirdRCmd}"
-                                  MappedToCommand="{x:Static local:SampleCommands.Third}" />
+        <!--<cmd:MapperCommandBinding Command="{StaticResource ThirdRCmd}"
+                                  MappedToCommand="{x:Static local:SampleCommands.Third}" />-->
 
         <!--We put that to the end of the CommandBinding list, to see the bad way working-->
         <CommandBinding Command="{x:Static local:SampleCommands.Third}"
@@ -130,7 +129,7 @@
     <DockPanel>
 
         <!--Sample Ribbon for the MapperCommandBinding-->
-        <r:Ribbon DockPanel.Dock="Top">
+        <!--<r:Ribbon DockPanel.Dock="Top">
             <r:RibbonTab Label="Sample">
                 <r:RibbonGroup>
                     <r:RibbonGroup.Command>
@@ -141,7 +140,7 @@
                     <r:RibbonButton Command="{StaticResource ThirdRCmd}" />
                 </r:RibbonGroup>
             </r:RibbonTab>
-        </r:Ribbon>
+        </r:Ribbon>-->
 
         <!--Sample for the attached Behaviours-->
         <TabControl>
